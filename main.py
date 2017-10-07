@@ -15,12 +15,13 @@ def on_ready():
 @client.event
 @asyncio.coroutine
 def on_message(message):
-    # Disconnect
+    # Play
     if message.content.startswith('!verivetää'):
         try:
             channel = message.author.voice.voice_channel
             voice = yield from client.join_voice_channel(channel)
             player = voice.create_ffmpeg_player('music/veri.mp3')
+            yield from client.send_message(message.channel, "Veri vetää itään jos päihteistä pitää!")
             yield from asyncio.sleep(3)
             player.start()
         except Exception as e:
