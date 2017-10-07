@@ -3,7 +3,6 @@ import asyncio
 
 client = discord.Client()
 
-
 @client.event
 @asyncio.coroutine
 def on_ready():
@@ -16,9 +15,24 @@ def on_ready():
 @client.event
 @asyncio.coroutine
 def on_message(message):
-    if message.content.startswith('!verivetaa'):
-        yield from asyncio.sleep(5)
-        yield from client.send_message(message.channel, 'Veri vetää itään jos päihteistä pitää!')
+    # Disconnect
+    if message.content.startswith('!verivetää'):
+        try:
+            channel = message.author.voice.voice_channel
+            voice = yield from client.join_voice_channel(channel)
+            player = voice.create_ffmpeg_player('music/veri.mp3')
+            yield from asyncio.sleep(3)
+            player.start()
+        except Exception as e:
+            print(e.message)
+
+    # Disconnect
+    if message.content.startswith('!moro'):
+        try:
+            voice_client = client.voice_client_in(message.server)
+            yield from voice_client.disconnect()
+        except AttributeError as attr_e:
+            print(attr_e.message)
 
 
 if __name__ == '__main__':
