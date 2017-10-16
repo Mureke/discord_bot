@@ -1,12 +1,13 @@
 import discord
 import asyncio
-
+import music_player
+import chat_commands
 
 class ItaBot(discord.Client):
     def __init__(self):
         super(ItaBot, self).__init__()
-        self.client_id = 'MzY0NTE1MTIxNzY4MTY5NDky.DLoqtg.HcALlv1bt6p8DYxdInMYC7SA3mI'
         self.voice = None
+        self.player = None
 
     @asyncio.coroutine
     def on_ready(self):
@@ -16,12 +17,14 @@ class ItaBot(discord.Client):
     @asyncio.coroutine
     def on_message(self, message):
         # Play
-        player = self.voice.create_ffmpeg_player('music/veri.mp3')
-        if message.content.startswith('!verivetää'):
-            try:
-                player.start()
-            except Exception as e:
-                print(e.message)
+        command = message.content
+        if command.startswith('!player'):
+            player_function = getattr(music_player, message.content.split()[1])
+            self.player = player_function(self.voice, command)
+        elif command.startswith('!bot'):
+            bot_message = chat_commands.find_command(command)
+            asyncio.sleep(2)
+            yield from self.send_message(message.channel, bot_message)
 
     def set_active_channel(self):
         """
@@ -37,11 +40,11 @@ class ItaBot(discord.Client):
                 print('Joining voice channel %s' % channel.name)
                 return channel
 
-    def bot_start(self):
+    def bot_start(self, client_id):
         """
         Starts bot
 
         :return:
             None
         """
-        self.run(self.client_id)
+        self.run(client_id)
