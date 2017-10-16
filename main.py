@@ -10,11 +10,11 @@ if __name__ == '__main__':
                 settings = yaml.load(settings_yml)
                 client_id = settings[env]['client_id']
             except yaml.YAMLError as e:
-                print(e)
-                exit()
+                exit(e)
+            except Exception as e:
+                exit(e)
     else:
-        print('ERROR: No command line arguments found.')
-        exit()
+        exit('ERROR: No command line arguments found.')
 
     bot = ItaBot()
     bot.run(client_id)

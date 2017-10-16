@@ -30,7 +30,6 @@ class ItaBot(discord.Client):
             player_function = getattr(self.player, func_name)
             yield from player_function()
 
-
         # Chat commands
         elif command.startswith('!chat'):
             bot_message = chat_commands.find_command(command)
@@ -40,13 +39,10 @@ class ItaBot(discord.Client):
     def set_active_channel(self):
         """
         Return selected voice channel object
-
         :return:
             Channel channel
         """
-
         channels = self.get_all_channels()
         for channel in channels:
             if channel.name == 'Vuosaari':
-                print('Joining voice channel %s' % channel.name)
                 return channel
