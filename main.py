@@ -17,4 +17,4 @@ if __name__ == '__main__':
         exit()
 
     bot = ItaBot()
-    bot.bot_start(client_id)
+    bot.run(client_id)
