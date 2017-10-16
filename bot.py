@@ -5,8 +5,6 @@ import chat_commands
 
 
 class ItaBot(discord.Client):
-    INVALID_CH_MSG = 'Menehä jonnekki muualle huutelemaan täältä'
-
     def __init__(self):
         super(ItaBot, self).__init__()
         self.voice = None
@@ -20,9 +18,9 @@ class ItaBot(discord.Client):
     @asyncio.coroutine
     def on_message(self, message):
         command = message.content
-        if message.channel.name == 'general' and command != self.INVALID_CH_MSG:
-            asyncio.sleep(2)
-            yield from self.send_message(message.channel, 'Menehä jonnekki muualle huutelemaan täältä')
+        if message.channel.name == 'general':
+            return
+
         # Music player commands
         if command.startswith('!player'):
             func_name = command.split()[1]
@@ -48,9 +46,8 @@ class ItaBot(discord.Client):
                 except Exception as e:
                     print(e)
 
-
         # Chat commands
-        elif command.startswith('!bot'):
+        elif command.startswith('!chat'):
             bot_message = chat_commands.find_command(command)
             asyncio.sleep(2)
             yield from self.send_message(message.channel, bot_message)
