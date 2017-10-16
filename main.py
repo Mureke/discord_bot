@@ -13,7 +13,7 @@ if __name__ == '__main__':
                 print(e)
                 exit()
     else:
-        print('ERROR: No command line argumens found.')
+        print('ERROR: No command line arguments found.')
         exit()
 
     bot = ItaBot()

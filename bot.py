@@ -1,6 +1,6 @@
 import discord
 import asyncio
-import music_loader
+import music_player
 import chat_commands
 
 
@@ -10,10 +10,12 @@ class ItaBot(discord.Client):
         self.voice = None
         self.player = None
 
+
     @asyncio.coroutine
     def on_ready(self):
         channel = self.set_active_channel()
         self.voice = yield from self.join_voice_channel(channel)
+        self.player = music_player.Player(self.voice)
 
     @asyncio.coroutine
     def on_message(self, message):
@@ -23,28 +25,11 @@ class ItaBot(discord.Client):
 
         # Music player commands
         if command.startswith('!player'):
+            self.player.command = command
             func_name = command.split()[1]
+            player_function = getattr(self.player, func_name)
+            yield from player_function()
 
-            # Play
-            if func_name == 'play' or func_name == 'ytplay':
-                if self.player is not None and self.player.is_playing():
-                    self.player.stop()
-                player_function = getattr(music_loader, func_name)
-                self.player = yield from player_function(self.voice, command)
-                try:
-                    self.player.start()
-                except AttributeError as attre:
-                    print(attre)
-
-            # Start, stop or resume
-            else:
-                try:
-                    allowed_methods = ['stop', 'pause', 'resume']
-                    if func_name in allowed_methods:
-                        player_function = getattr(self.player, func_name)
-                        player_function()
-                except Exception as e:
-                    print(e)
 
         # Chat commands
         elif command.startswith('!chat'):
