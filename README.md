@@ -1,4 +1,3 @@
-run:
 
 sudo apt-get install ffmpeg
 
