@@ -1,6 +1,3 @@
-Iha vitu vihane botti joka soittaa discordis iha vitu vihasta itäräppii. vittu.
-
-
 run:
 
 sudo apt-get install ffmpeg
